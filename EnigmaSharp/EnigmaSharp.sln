@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnigmaSharp", "EnigmaSharp\EnigmaSharp.csproj", "{DD770F5D-56E3-43E8-A028-2372E1E57B7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnigmaSharp.Web", "EnigmaSharp.Web\EnigmaSharp.Web.csproj", "{F3E2889A-F3D3-4593-B4CE-A2D9BC613E7D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD770F5D-56E3-43E8-A028-2372E1E57B7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD770F5D-56E3-43E8-A028-2372E1E57B7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD770F5D-56E3-43E8-A028-2372E1E57B7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD770F5D-56E3-43E8-A028-2372E1E57B7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3E2889A-F3D3-4593-B4CE-A2D9BC613E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3E2889A-F3D3-4593-B4CE-A2D9BC613E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3E2889A-F3D3-4593-B4CE-A2D9BC613E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3E2889A-F3D3-4593-B4CE-A2D9BC613E7D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3EC9938F-F0CE-4F5B-9734-731E6FA495E4}
+	EndGlobalSection
+EndGlobal

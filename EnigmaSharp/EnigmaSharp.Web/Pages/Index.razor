@@ -1,0 +1,177 @@
+﻿@page "/"
+@using System.Text.RegularExpressions
+
+<PageTitle>Enigma | A Project by Aarav Hattangadi</PageTitle>
+
+<h1>Enigma</h1>
+<div class="row">
+    <small>A project by <a href="https://www.hattangadi.com/">Aarav Hattangadi</a></small>
+    <small>View project on <a href="https://github.com/ahattangadi/EnigmaSharp">GitHub</a></small>
+    <small>Made with ❤️ using C# and .NET 6</small>
+</div>
+<hr />
+<p>
+    Enigma was a encryption device used widely by the Germans during World War II. It was a substitution
+    cipher that encrypted letters by replacing them with different letters. It was a complex cipher based
+    upon the Caesar cipher. <a href="https://hattangadi.com/blog/the-enigma-machines-ingenious-encryption/">Read more &hellip;</a>
+    <br />
+    <br />
+    This is an attempt at coding an Enigma machine using Blazor WASM and C#. Please note, this is an illustrative
+    example only and may not be accurate at all times.
+</p>
+<hr>
+
+<fieldset>
+    <legend>&nbsp; Enigma Machine &nbsp;</legend>
+
+    <EditForm Model="model" OnSubmit="HandleSubmit">
+        <h3>Rotor Settings</h3>
+        <strong>Rotor Number (I-VI)</strong>
+        <div class="row">
+            <div>
+                <label>Fast Rotor</label>
+                <InputNumber @bind-Value="model.Rotor1" min="1" max="6"></InputNumber>
+                
+            </div>
+            <div>
+                <label>Middle Rotor</label>
+                <InputNumber @bind-Value="model.Rotor2" min="1" max="6"></InputNumber>
+            </div>
+            <div>
+                <label>Slow Rotor</label>
+                <InputNumber @bind-Value="model.Rotor3" min="1" max="6"></InputNumber>
+            </div>
+        </div>
+        <br />
+        <strong>Starting positions</strong>
+        <br />
+        <div class="row">
+            <InputText maxlength="1" placeholder="Rotor 1" @bind-Value="model.Rotor1Starting"></InputText>
+            <InputText maxlength="1" placeholder="Rotor 2" @bind-Value="model.Rotor2Starting"></InputText>
+            <InputText maxlength="1" placeholder="Rotor 3" @bind-Value="model.Rotor3Starting"></InputText>
+
+        </div>
+
+        <strong>Ring settings</strong>
+        <div class="container">
+            <div class="content row">
+                <InputText maxlength="1" placeholder="Rotor 1" @bind-Value="model.Rotor1Ringstellung" disabled="true"></InputText>
+                <InputText maxlength="1" placeholder="Rotor 2" @bind-Value="model.Rotor2Ringstellung" disabled="true"></InputText>
+                <InputText maxlength="1" placeholder="Rotor 3" @bind-Value="model.Rotor3Ringstellung" disabled="true"></InputText>
+            </div>
+            <div class="overlay">
+                🚧 Under construction 🚧
+            </div>
+        </div>
+        <h3>Plugboard swaps</h3>
+        <InputText @bind-Value="model.PlugboardConf" placeholder="ab cd ef gh ij kl" style="width: 96%"></InputText>
+        <h3>Reflector A/B/C</h3>
+        <InputText maxlength="1" placeholder="B" @bind-Value="model.Reflector"></InputText>
+
+        <h3>Text to encrypt</h3>
+        <InputTextArea @bind-Value="model.TextToEncrypt"></InputTextArea>
+
+        <button type="submit" style="width: 100%">Encrypt</button>
+    </EditForm>
+    <h3>Encrypted text</h3>
+    <code>@cipherText</code>
+</fieldset>
+
+
+@code {
+    
+    string cipherText = "";
+    EnigmaSettingsModel model = new EnigmaSettingsModel();
+
+
+    public class EnigmaSettingsModel
+    {
+        public int    Rotor1             { get; set; }
+        public int    Rotor2             { get; set; }
+        public int    Rotor3             { get; set; }
+        public string Reflector          { get; set; }
+        public string PlugboardConf      { get; set; }
+        public string Rotor1Starting     { get; set; }
+        public string Rotor2Starting     { get; set; }
+        public string Rotor3Starting     { get; set; }
+        public string Rotor1Ringstellung { get; set; }
+        public string Rotor2Ringstellung { get; set; }
+        public string Rotor3Ringstellung { get; set; }
+        public string TextToEncrypt      { get; set; }
+    }
+
+
+    public EnigmaSharp.Rotor GetChosenRotor(int number)
+    {
+        if (number == 1)
+        {
+            return new Rotor(EnigmaSharp.Globals.ROTOR_I_WIRING, EnigmaSharp.Globals.ROTOR_I_TURNOVER_NOTCH);
+        }
+        else if (number == 2)
+        {
+            return new Rotor(EnigmaSharp.Globals.ROTOR_II_WIRING, EnigmaSharp.Globals.ROTOR_II_TURNOVER_NOTCH);
+        }
+        else if (number == 3)
+        {
+            return new Rotor(EnigmaSharp.Globals.ROTOR_III_WIRING, EnigmaSharp.Globals.ROTOR_III_TURNOVER_NOTCH);
+        }
+        else if (number == 4)
+        {
+            return new Rotor(EnigmaSharp.Globals.ROTOR_IV_WIRING, EnigmaSharp.Globals.ROTOR_IV_TURNOVER_NOTCH);
+        }
+        else if (number == 5)
+        {
+            return new Rotor(EnigmaSharp.Globals.ROTOR_V_WIRING, EnigmaSharp.Globals.ROTOR_V_TURNOVER_NOTCH);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public void HandleSubmit()
+    {
+        string[] _plugboardConf = model.PlugboardConf.ToUpper().Split(new string[] { " " }, StringSplitOptions.None);
+        string _reflectorWiring;
+
+        if (model.Reflector == "A" || model.Reflector == "a")
+        {
+            _reflectorWiring = EnigmaSharp.Globals.REFLECTOR_A_WIRING;
+        }
+        else if (model.Reflector == "B" || model.Reflector == "b")
+        {
+            _reflectorWiring = EnigmaSharp.Globals.REFLECTOR_B_WIRING;
+        }
+        else if (model.Reflector == "C" || model.Reflector == "c")
+        {
+            _reflectorWiring = EnigmaSharp.Globals.REFLECTOR_C_WIRING;
+        }
+        else
+        {
+            _reflectorWiring = "";
+        }
+
+        EnigmaSharp.Keyboard _keyboard = new EnigmaSharp.Keyboard();
+        EnigmaSharp.Plugboard _plugboard = new EnigmaSharp.Plugboard(_plugboardConf);
+        EnigmaSharp.Reflector _reflector = new EnigmaSharp.Reflector(_reflectorWiring);
+        EnigmaSharp.Rotor _rotor1 = GetChosenRotor(model.Rotor1);
+        EnigmaSharp.Rotor _rotor2 = GetChosenRotor(model.Rotor2);
+        EnigmaSharp.Rotor _rotor3 = GetChosenRotor(model.Rotor3);
+
+        EnigmaSharp.Enigma _enigma = new EnigmaSharp.Enigma(_keyboard, _plugboard, _rotor1, _rotor2, _rotor3, _reflector);
+
+        _enigma.setKey(String.Concat(model.Rotor1Starting, model.Rotor2Starting, model.Rotor3Starting));
+
+        char[] charsToEncrypt = model.TextToEncrypt.ToUpper().Replace(" ", "").Replace("\n", "").ToCharArray();
+
+        cipherText = "";
+        foreach (char character in charsToEncrypt)
+        {
+            cipherText = cipherText + _enigma.encrypt(character);
+        }
+
+        // cipherText = string.Join(" ", Enumerable.Range(0, cipherText.Length / 5).Select(i => cipherText.Substring(i * 5, 5)).ToList());
+
+        var brokenString = cipherText.Chunk(5).Select(x => new string(x)).ToList();
+        cipherText = string.Join(" ", brokenString);
+    }
+}

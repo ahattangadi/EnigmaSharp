@@ -1,0 +1,32 @@
+﻿using System;
+
+namespace EnigmaSharp
+{
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            Rotor I = new Rotor(Globals.ROTOR_I_WIRING, Globals.ROTOR_I_TURNOVER_NOTCH);
+            Rotor II = new Rotor(Globals.ROTOR_II_WIRING, Globals.ROTOR_II_TURNOVER_NOTCH);
+            Rotor III = new Rotor(Globals.ROTOR_III_WIRING, Globals.ROTOR_III_TURNOVER_NOTCH);
+            Rotor IV = new Rotor(Globals.ROTOR_IV_WIRING, Globals.ROTOR_IV_TURNOVER_NOTCH);
+            Reflector reflector = new Reflector(Globals.REFLECTOR_B_WIRING);
+            Keyboard keyboard = new Keyboard();
+            Plugboard plugboard = new Plugboard(new string[] {"YH", "BC", "KI", "LO", "PA", "NE", "MD", "QW", "SF"});
+
+            Enigma enigma = new Enigma(keyboard, plugboard, III, I, IV, reflector);
+
+            enigma.setKey("BTH");
+            
+            string message = "BOOTSECTOR";
+            string cipherText = "";
+            foreach (char letter in message)
+            {
+                var sigletter = enigma.encrypt(char.ToUpper(letter));
+                Console.WriteLine("Current Letter: " + letter + "<--->" + sigletter + "\n");
+                cipherText = cipherText + sigletter;
+            } 
+            Console.WriteLine(cipherText);
+        }
+    }
+}
