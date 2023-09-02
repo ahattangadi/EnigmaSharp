@@ -71,7 +71,11 @@
         <h3>Text to encrypt</h3>
         <InputTextArea @bind-Value="model.TextToEncrypt"></InputTextArea>
 
-        <button type="submit" style="width: 100%">Encrypt</button>
+        <button type="submit" style="width: 100%">
+            Encrypt
+            <br>
+            <small>Check out the console if you want to see the encryption process</small>
+        </button>
     </EditForm>
     <h3>Encrypted text</h3>
     <code>@cipherText</code>
@@ -79,8 +83,8 @@
 
 
 @code {
-    
-    string cipherText = "";
+
+    string cipherText = "* No text encrypted. Press the encrypt button *";
     EnigmaSettingsModel model = new EnigmaSettingsModel();
 
 
@@ -130,6 +134,8 @@
     }
     public void HandleSubmit()
     {
+        cipherText = "Encrypting ...";
+
         string[] _plugboardConf = model.PlugboardConf.ToUpper().Split(new string[] { " " }, StringSplitOptions.None);
         string _reflectorWiring;
 
@@ -161,7 +167,8 @@
 
         _enigma.setKey(String.Concat(model.Rotor1Starting, model.Rotor2Starting, model.Rotor3Starting));
 
-        char[] charsToEncrypt = model.TextToEncrypt.ToUpper().Replace(" ", "").Replace("\n", "").ToCharArray();
+        string toEncrypt = model.TextToEncrypt.ToUpper().Replace(" ", "").Replace("\n", "");
+        char[] charsToEncrypt = Regex.Replace(toEncrypt, @"[^0-9a-zA-Z]", string.Empty).ToCharArray();
 
         cipherText = "";
         foreach (char character in charsToEncrypt)
